@@ -1,0 +1,41 @@
+class Solution {
+    public String minWindow(String s2, String s1) {
+        
+        int[] arr = new int[128];
+        int L=0,R=0, counter =0, minLen=Integer.MAX_VALUE;
+        char[] s1_arr = s1.toCharArray();
+        char[] s2_arr = s2.toCharArray();
+        String ans = "";
+
+        for(char cur : s1_arr)
+        {
+            arr[cur]++;
+        }
+
+        while(R<s2_arr.length)
+        {
+         char cur = s2_arr[R];
+         if(--arr[cur]>=0){
+             counter++;
+         }   
+
+         while(counter == s1_arr.length)
+         {
+             int curLen = R-L+1;
+           if(curLen<minLen)
+           {
+               minLen = curLen;
+               ans = s2.substring(L,R+1);
+
+           }
+             char LeftChar = s2_arr[L];
+             if(++arr[LeftChar]>0){
+                 counter--;
+             }
+             L++;
+         }
+         R++;
+        }
+        return ans;
+    }
+}
