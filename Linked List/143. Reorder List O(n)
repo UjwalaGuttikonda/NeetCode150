@@ -1,0 +1,75 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    
+    // Method to reorder a singly-linked list
+    public void reorderList(ListNode head) {
+        // Check if the list is empty or contains only one element
+        if (head == null || head.next == null) return;
+        
+        // Initialize pointers for finding the middle of the list
+        ListNode l1 = head;
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
+
+        // Find the middle of the list using slow and fast pointers
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        // Split the list into two halves
+        prev.next = null;
+        ListNode l2 = reverse(slow); // Reverse the second half
+        merge(l1, l2); // Merge the two halves
+    }
+
+    // Helper method to reverse a linked list
+    public ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        ListNode current_node = head;
+
+        // Iterate through the list and reverse the pointers
+        while (current_node != null) {
+            ListNode next_node = current_node.next;
+            current_node.next = prev;
+            prev = current_node;
+            current_node = next_node;
+        }
+        return prev;
+    }
+
+    // Helper method to merge two linked lists
+    public void merge(ListNode l1, ListNode l2) {
+        // Iterate through the first half of the original list
+        while (l1 != null) {
+            ListNode l1_next = l1.next;
+            ListNode l2_next = l2.next;
+
+            // Connect the nodes from l2 to l1
+            l1.next = l2;
+
+            // Break if l1 is at the end of the original list
+            if (l1_next == null) {
+                break;
+            }
+
+            // Connect the nodes from l1_next to l2
+            l2.next = l1_next;
+
+            // Move pointers to the next nodes in l1 and l2
+            l1 = l1_next;
+            l2 = l2_next;
+        }
+    }
+}
