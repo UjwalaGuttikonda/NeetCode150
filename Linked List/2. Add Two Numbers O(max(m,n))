@@ -1,0 +1,59 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    // Method to add two numbers represented by linked lists
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        // Create a dummy node to simplify handling edge cases and the result
+        ListNode dummy = new ListNode(0);
+        // Pointer for the current node in the result list
+        ListNode l3 = dummy;
+
+        // Variable to keep track of the carry
+        int carry = 0;
+
+        // Iterate through the input lists until both are exhausted
+        while (l1 != null || l2 != null) {
+            // Extract values of the current nodes in l1 and l2 (default to 0 if null)
+            int l1_val = (l1 != null) ? l1.val : 0;
+            int l2_val = (l2 != null) ? l2.val : 0;
+
+            // Calculate the sum of current nodes' values and the carry
+            int current_sum = l1_val + l2_val + carry;
+
+            // Update the carry for the next calculation
+            carry = current_sum / 10;
+
+            // Extract the last digit of the sum
+            int last_digit = current_sum % 10;
+
+            // Create a new node with the last digit and add it to the result list
+            ListNode new_node = new ListNode(last_digit);
+            l3.next = new_node;
+
+            // Move to the next nodes in l1, l2, and the result list
+            if (l1 != null) l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
+            l3 = l3.next;
+        }
+
+        // Check if there is a carry left after processing both lists
+        if (carry > 0) {
+            // Create a new node with the carry and add it to the result list
+            ListNode new_node = new ListNode(carry);
+            l3.next = new_node;
+            // Move to the new node in the result list
+            l3 = l3.next;
+        }
+
+        // Return the result list starting from the next of the dummy node
+        return dummy.next;
+    }
+}
