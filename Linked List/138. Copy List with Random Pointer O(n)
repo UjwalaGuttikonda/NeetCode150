@@ -1,0 +1,72 @@
+/*
+// Definition for a Node.
+class Node {
+    int val;
+    Node next;
+    Node random;
+
+    public Node(int val) {
+        this.val = val;
+        this.next = null;
+        this.random = null;
+    }
+}
+*/
+
+class Solution {
+    // Method to perform a deep copy of a linked list with random pointers
+    public Node copyRandomList(Node head) {
+        // Check if the original list is empty
+        if (head == null) {
+            return null;
+        }
+
+        // HashMap to store the correspondence between original and cloned nodes
+        HashMap<Node, Node> hm = new HashMap<>();
+        
+        // Initialize current pointer to the head of the original list
+        Node cur = head;
+        
+        // First Pass: Clone Nodes and Map them
+        // Iterate through the original list and clone nodes
+        while (cur != null) {
+            // Create a clone node for the current original node
+            Node curClone = new Node(cur.val);
+
+            // Map the original node to its corresponding clone in the HashMap
+            hm.put(cur, curClone);
+
+            // Move to the next node in the original list
+            cur = cur.next;
+        }
+
+        // Second Pass: Connect Cloned Nodes and Set Random Pointers
+        // Reset the current pointer to the head of the original list
+        cur = head;
+        while (cur != null) {
+            // Retrieve the corresponding clone node from the HashMap
+            Node curClone = hm.get(cur);
+
+            // Check and create clone for the random pointer if it exists
+            if (cur.random != null) {
+                // Retrieve the corresponding clone node for the random pointer
+                Node randomClone = hm.get(cur.random);
+
+                // Set the random pointer of the clone node
+                curClone.random = randomClone;
+            }
+
+            // Retrieve the corresponding clone node for the next pointer
+            Node nextClone = hm.get(cur.next);
+
+            // Set the next pointer of the clone node
+            curClone.next = nextClone;
+
+            // Move to the next node in the original list
+            cur = cur.next;
+        }
+
+        // The head of the cloned list is the corresponding clone of the original head
+        return hm.get(head);
+    }
+}
